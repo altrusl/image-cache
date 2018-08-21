@@ -1,15 +1,6 @@
 <?php
 // This script takes an image and resizes it to the given dimensions, then saves
 // that version on the filesystem so Apache can serve it directly in the future.
-// It is inspired by Drupal's ImageCache module [1] and a blog post by Sumit
-// Birla [2], but was written from scratch.
-// It automatically doubles the dimensions if the suffix '@2x' is used, for use
-// with the jQuery Retina Display plugin or retina.js [4].
-// [1]: http://drupal.org/project/imagecache
-// [2]: http://sumitbirla.com/2011/11/how-to-build-a-scalable-caching-resizing-image-server/
-// [3]: https://github.com/mcilvena/jQuery-Retina-Display-Plugin
-// [4]: http://retinajs.com/
-// https://gist.github.com/davejamesmiller/3236415
 
 header("Cache-control: public");
 header("Cache-control: max-age=3600000");
@@ -19,7 +10,7 @@ header("Expires: Thu, 01 Jan 2040 00:00:01 GMT");
 // sleep(5);
 
 
-$LastModified_unix = 1294844676; // время последнего изменения страницы
+// $LastModified_unix = 1294844676;
 $LastModified = gmdate("D, d M Y H:i:s \G\M\T", $LastModified_unix);
 $IfModifiedSince = false;
 if (isset($_ENV['HTTP_IF_MODIFIED_SINCE']))
@@ -80,30 +71,10 @@ switch ($size) {
 
 $size     = $_GET['size'];
 
-// Check the filename is safe & check file type
-// if (preg_match('#^[a-z0-9_\-\.]+(@2x)?\.(jpg|jpeg|png)$#i', $file, $matches) && strpos($file, '..') === false) {    
-	// $retina    = $matches[1];
-    // $extension = $matches[2];
-// } else {
-    // die("Invalid filename: $file");
-// }
-
-// Double the size for retina devices
-// if ($retina) {
-    // if ($thumbWidth)
-        // $thumbWidth *= 2;
-    // if ($thumbHeight)
-        // $thumbHeight *= 2;
-    // $original = str_replace('@2x', '', $original);
-// }
-
 $file = basename($url);
 if (strpos($file, "?") > 0) {
 	$file = substr($file, 0, strpos($file, "?"));
 }
-// echo $url;
-// exit;
-
 	
 // Make sure the directory exists
 if (!is_dir("imagecache/originals")) {
@@ -124,8 +95,6 @@ if (!file_exists($target)) {
 		require 'guzzle/vendor/autoload.php';
 
 		$client = new \GuzzleHttp\Client();
-		// $url = 'http://cdni.rt.com/russian/images/2018.03/original/5ab3ab7e183561ab028b45d3.jpg';
-		// $filename = $original;
 		$client->get($url, ['save_to' => $original]);
 	}
 	
@@ -207,8 +176,6 @@ if (!file_exists($target)) {
 		imagedestroy($thumbImage);
 	// }
 }
-// echo $target;
-// Send the file header
 $data = getimagesize($target);
 if (!$data) {
     die("Cannot get mime type");
