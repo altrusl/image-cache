@@ -1,8 +1,8 @@
 # image-cache
-This script caching external images on webserver
+This script for caching external images on webserver
 
 The server fetches images from external source, caches them locally and makes copies of those images of certain sizes.
-So the user can have the following image directory structure on the server-side:
+So the user can have the following image directory structure, for example, on the server-side:
 
 imagecache:
  - icons
